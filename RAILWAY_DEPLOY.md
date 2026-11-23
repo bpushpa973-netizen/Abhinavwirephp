@@ -2,8 +2,8 @@
 
 ## Deploy
 1. Push this folder's contents to a GitHub repository and create a Railway project from that repository (or deploy the folder with the Railway CLI).
-2. Add a Railway MySQL database service and link it to the web service. Railway provides `MYSQLHOST`, `MYSQLPORT`, `MYSQLDATABASE`, `MYSQLUSER`, and `MYSQLPASSWORD`; this app reads those variables automatically.
-3. Import `database.sql` into the linked MySQL database once. Use Railway's database connection details; do not use `localhost` for a separate Railway MySQL service.
+2. Add a Railway MySQL database service and link it to the web service. Railway provides `MYSQLHOST`, `MYSQLPORT`, `MYSQLDATABASE`, `MYSQLUSER`, and `MYSQLPASSWORD`; this app reads those variables automatically. It also accepts `MYSQL_HOST`, `MYSQL_PORT`, `MYSQL_DATABASE`, `MYSQL_USER`, `MYSQL_PASSWORD`, or a standard `DATABASE_URL`. Make sure the MySQL service is linked to the PHP web service (Variables → Add Reference).
+3. Import `database.sql` into the linked MySQL database once. Set `ADMIN_USERNAME=admin`, `ADMIN_EMAIL=admin@example.com`, and a strong `ADMIN_PASSWORD` (at least 12 characters) in the web service Variables. On the first successful database connection, the app creates or resets that admin account. Remove `ADMIN_PASSWORD` after confirming the first login. Use Railway's database connection details; do not use `localhost` for a separate Railway MySQL service.
 4. The included `Dockerfile` installs PHP 8.3 CLI and `pdo_mysql`, then listens on `0.0.0.0:$PORT`. Railway supplies `PORT` and its generated domain provides HTTPS.
 5. In Railway, generate a domain under the web service's Networking settings. Test `https://YOUR-DOMAIN/health`, then `/login` and `/api`.
 
@@ -51,3 +51,7 @@ The private key signs responses; it does not encrypt them for secrecy. If confid
 - `GET /health`
 
 The PHP app's existing session/login pages and admin features remain served by the same runtime. Apache `.htaccess` is retained for Apache deployments; `router.php` supplies equivalent clean PHP routes on Railway.
+
+
+## Admin login bootstrap
+Set `ADMIN_USERNAME`, `ADMIN_EMAIL`, and `ADMIN_PASSWORD` in the Railway web service Variables. The password must be at least 12 characters. The app hashes it with PHP `password_hash()` and creates/updates the admin account on the first successful DB connection. Do not put the password in source code or commit it. The SQL dump's legacy email is `admin@example.com`; the bootstrap settings can update it.
