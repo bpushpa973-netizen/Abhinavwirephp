@@ -1,159 +1,29 @@
 <?php
-declare(strict_types=1);
-session_start();
 require_once __DIR__ . '/config/database.php';
-
-$tables = [
-"CREATE TABLE IF NOT EXISTS users (
- id INT NOT NULL AUTO_INCREMENT,
- username VARCHAR(50) NOT NULL,
- email VARCHAR(100) NOT NULL,
- password VARCHAR(255) NOT NULL,
- balance DECIMAL(10,2) NOT NULL DEFAULT 0.00,
- role ENUM('admin','user') NOT NULL DEFAULT 'user',
- referral_code VARCHAR(20) DEFAULT NULL,
- referred_by VARCHAR(20) DEFAULT NULL,
- created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
- PRIMARY KEY (id),
- UNIQUE KEY uq_users_username (username),
- UNIQUE KEY uq_users_email (email),
- UNIQUE KEY uq_users_referral_code (referral_code),
- KEY idx_users_role (role)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
-"CREATE TABLE IF NOT EXISTS mods (
- id INT NOT NULL AUTO_INCREMENT,
- name VARCHAR(100) NOT NULL,
- description TEXT DEFAULT NULL,
- status ENUM('active','inactive') NOT NULL DEFAULT 'active',
- created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
- PRIMARY KEY (id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
-"CREATE TABLE IF NOT EXISTS license_keys (
- id INT NOT NULL AUTO_INCREMENT,
- mod_id INT NOT NULL,
- license_key VARCHAR(100) NOT NULL,
- duration INT NOT NULL,
- duration_type ENUM('hours','days','months') NOT NULL DEFAULT 'days',
- price DECIMAL(10,2) NOT NULL DEFAULT 0.00,
- status ENUM('available','sold') NOT NULL DEFAULT 'available',
- sold_to INT DEFAULT NULL,
- sold_at TIMESTAMP NULL DEFAULT NULL,
- device_id VARCHAR(255) DEFAULT NULL,
- created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
- PRIMARY KEY (id),
- UNIQUE KEY uq_license_keys_key (license_key),
- KEY idx_license_keys_mod_id (mod_id),
- KEY idx_license_keys_status (status),
- KEY idx_license_keys_sold_to (sold_to),
- CONSTRAINT fk_license_keys_mod FOREIGN KEY (mod_id) REFERENCES mods(id) ON DELETE CASCADE,
- CONSTRAINT fk_license_keys_user FOREIGN KEY (sold_to) REFERENCES users(id) ON DELETE SET NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
-"CREATE TABLE IF NOT EXISTS mod_apks (
- id INT NOT NULL AUTO_INCREMENT,
- mod_id INT NOT NULL,
- file_name VARCHAR(255) NOT NULL,
- file_path VARCHAR(500) NOT NULL,
- file_size INT NOT NULL DEFAULT 0,
- uploaded_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
- PRIMARY KEY (id),
- KEY idx_mod_apks_mod_id (mod_id),
- CONSTRAINT fk_mod_apks_mod FOREIGN KEY (mod_id) REFERENCES mods(id) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
-"CREATE TABLE IF NOT EXISTS referral_codes (
- id INT NOT NULL AUTO_INCREMENT,
- code VARCHAR(20) NOT NULL,
- created_by INT NOT NULL,
- expires_at TIMESTAMP NOT NULL,
- status ENUM('active','inactive') NOT NULL DEFAULT 'active',
- created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
- PRIMARY KEY (id),
- UNIQUE KEY uq_referral_codes_code (code),
- KEY idx_referral_codes_created_by (created_by),
- KEY idx_referral_codes_status (status),
- CONSTRAINT fk_referral_codes_user FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
-"CREATE TABLE IF NOT EXISTS transactions (
- id INT NOT NULL AUTO_INCREMENT,
- user_id INT NOT NULL,
- amount DECIMAL(10,2) NOT NULL,
- type ENUM('purchase','balance_add','refund') NOT NULL,
- reference VARCHAR(100) DEFAULT NULL,
- status ENUM('pending','completed','failed') NOT NULL DEFAULT 'pending',
- created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
- PRIMARY KEY (id),
- KEY idx_transactions_user_id (user_id),
- KEY idx_transactions_type (type),
- KEY idx_transactions_status (status),
- CONSTRAINT fk_transactions_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
-"CREATE TABLE IF NOT EXISTS user_sessions (
- user_id INT NOT NULL,
- session_id VARCHAR(255) NOT NULL,
- ip_address VARCHAR(45) DEFAULT NULL,
- user_agent VARCHAR(255) DEFAULT NULL,
- created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
- PRIMARY KEY (user_id),
- KEY idx_user_sessions_created_at (created_at),
- CONSTRAINT fk_user_sessions_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci"
-];
-
-$error = '';
-$success = '';
-$pdo = null;
+if (session_status() === PHP_SESSION_NONE) session_start();
+$error = ''; $success = false;
 try {
     $pdo = getDBConnection();
-    $adminExists = false;
-    try {
-        $check = $pdo->query("SHOW TABLES LIKE 'users'");
-        if ($check->fetchColumn()) {
-            $checkAdmin = $pdo->query("SELECT COUNT(*) FROM users WHERE role = 'admin'");
-            $adminExists = ((int)$checkAdmin->fetchColumn() > 0);
-        }
-    } catch (Throwable $ignored) {}
-    if ($adminExists) {
-        $success = 'Database setup is already complete. An admin account exists.';
-    } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $username = trim((string)($_POST['username'] ?? 'Abhinav'));
+    $adminCount = (int)$pdo->query("SELECT COUNT(*) FROM users WHERE role='admin'")->fetchColumn();
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && $adminCount === 0) {
+        $token = (string)($_POST['csrf'] ?? '');
+        if (empty($_SESSION['install_csrf']) || !hash_equals($_SESSION['install_csrf'], $token)) throw new RuntimeException('Session expired. Refresh this page.');
+        $username = trim((string)($_POST['username'] ?? ''));
         $email = trim((string)($_POST['email'] ?? ''));
         $password = (string)($_POST['password'] ?? '');
-        if ($username === '' || !filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($password) < 8) {
-            throw new RuntimeException('Enter a username, valid email, and password of at least 8 characters.');
-        }
-        foreach ($tables as $sql) {
-            $pdo->exec($sql);
-        }
-        $hash = password_hash($password, PASSWORD_DEFAULT);
-        $stmt = $pdo->prepare("INSERT INTO users (username,email,password,balance,role) VALUES (?,?,?,0.00,'admin')");
-        $stmt->execute([$username, $email, $hash]);
-        $success = 'All 7 database tables were created and your admin account is ready. Delete install.php from your deployed files now.';
+        if (!preg_match('/^[A-Za-z0-9_.-]{3,50}$/', $username)) throw new RuntimeException('Username must be 3–50 characters (letters, numbers, dot, underscore or dash).');
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) throw new RuntimeException('Enter a valid email address.');
+        if (strlen($password) < 12) throw new RuntimeException('Password must be at least 12 characters.');
+        $q=$pdo->prepare('SELECT COUNT(*) FROM users WHERE username=? OR email=?'); $q->execute([$username,$email]);
+        if ((int)$q->fetchColumn() > 0) throw new RuntimeException('Username or email already exists.');
+        $q=$pdo->prepare("INSERT INTO users (username,email,password,balance,role) VALUES (?,?,?,0,'admin')");
+        $q->execute([$username,$email,password_hash($password,PASSWORD_DEFAULT)]);
+        $success=true; $adminCount=1; unset($_SESSION['install_csrf']);
     }
-} catch (Throwable $e) {
-    $error = $e->getMessage();
-}
-?><!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Abhinav Multipanel Database Setup</title>
-<style>
-*{box-sizing:border-box}body{margin:0;background:#0b1020;color:#edf2ff;font:15px system-ui;min-height:100vh;display:grid;place-items:center;padding:20px}
-main{width:min(100%,480px);background:#151d32;border:1px solid #293653;border-radius:20px;padding:26px;box-shadow:0 20px 60px #0006}
-h1{margin:0 0 8px;font-size:23px}p{color:#aebbd4;line-height:1.55}.tag{color:#9d9eff;font-size:12px;font-weight:700;letter-spacing:1px}
-label{display:block;margin:15px 0 6px;color:#cbd5e1}input{width:100%;padding:13px;border-radius:10px;border:1px solid #405071;background:#0d1528;color:white;font-size:15px}
-button{width:100%;margin-top:20px;padding:14px;border:0;border-radius:11px;background:linear-gradient(100deg,#6658ee,#11a8c7);color:white;font-weight:800;font-size:15px}
-.notice{padding:13px;border-radius:10px;margin-top:15px;background:#103a31;color:#a7f3d0}.err{background:#451d2a;color:#fecdd3}
-small{color:#94a3b8}
-</style></head><body><main>
-<div class="tag">RAILWAY MYSQL • ONE-TIME INSTALLER</div><h1>Abhinav Multipanel Setup</h1>
-<p>This page creates the 7 required tables automatically. Create your first admin account below.</p>
-<?php if ($error !== ''): ?><div class="notice err"><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></div><?php endif; ?>
-<?php if ($success !== ''): ?><div class="notice"><?= htmlspecialchars($success, ENT_QUOTES, 'UTF-8') ?></div><?php endif; ?>
-<?php if ($success === '' || strpos($success, 'already complete') !== false): ?>
-<form method="post">
-<label>Admin username</label><input name="username" value="Abhinav" required>
-<label>Admin email</label><input name="email" type="email" placeholder="you@example.com" required>
-<label>Admin password (minimum 8 characters)</label><input name="password" type="password" minlength="8" required>
-<button type="submit">Create Database & Admin</button>
-</form>
-<?php endif; ?>
-<p><small>After successful setup, remove install.php from the deployed project for security.</small></p>
-</main></body></html>
+} catch (Throwable $e) { $error=$e->getMessage(); error_log('Installer: '.$e->getMessage()); }
+if (empty($_SESSION['install_csrf'])) $_SESSION['install_csrf']=bin2hex(random_bytes(32));
+?>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Abhinav Multipanel Setup</title><style>*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;background:#0b1020;color:#edf2ff;font:15px Arial,sans-serif;padding:20px}.card{width:min(440px,100%);background:#151d31;border:1px solid #2b3958;border-radius:18px;padding:28px;box-shadow:0 20px 70px #0008}h1{margin:0 0 8px;font-size:24px}.muted{color:#9eacc8;line-height:1.5}.field{display:block;margin:16px 0 6px;color:#cbd5e1}input{width:100%;padding:13px;border:1px solid #354563;border-radius:10px;background:#0d1527;color:white;font-size:15px}button,a.btn{display:block;width:100%;margin-top:20px;padding:13px;border:0;border-radius:10px;background:linear-gradient(90deg,#635bff,#06b6d4);color:white;text-align:center;text-decoration:none;font-weight:bold;font-size:15px}.msg{padding:12px;border-radius:10px;margin:16px 0;background:#3b1f2a;color:#ffc7d2}.ok{background:#12372e;color:#a7f3d0}.small{font-size:12px;color:#8fa0bf;margin-top:18px}</style></head><body><main class="card"><h1>Abhinav Multipanel</h1><p class="muted">Railway database setup. Required tables are created automatically when the database connection succeeds.</p>
+<?php if ($success): ?><div class="msg ok">Admin account created successfully. You can now log in.</div><a class="btn" href="/login">Open Login</a><p class="small">For security, remove install.php from your deployed files after setup.</p>
+<?php elseif (!empty($adminCount)): ?><div class="msg ok">Database is ready and an admin account already exists.</div><a class="btn" href="/login">Open Login</a><p class="small">Setup is locked because an admin account already exists.</p>
+<?php else: ?><?php if ($error): ?><div class="msg"><?php echo htmlspecialchars($error,ENT_QUOTES,'UTF-8'); ?></div><?php endif; ?><form method="post"><input type="hidden" name="csrf" value="<?php echo htmlspecialchars($_SESSION['install_csrf'],ENT_QUOTES,'UTF-8'); ?>"><label class="field">Admin username</label><input name="username" required minlength="3" maxlength="50" value="Abhinav"><label class="field">Admin email</label><input type="email" name="email" required><label class="field">Admin password (12+ characters)</label><input type="password" name="password" required minlength="12"><button type="submit">Create Database &amp; Admin</button></form><p class="small">No SQL upload/import required. Keep your password private.</p><?php endif; ?></main></body></html>

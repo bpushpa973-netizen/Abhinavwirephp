@@ -228,21 +228,24 @@ function updateBalance(int $userId, float $amount, string $type = 'balance_add',
 }
 
 
-?>
-
 /** Validate that a normal account owns a purchased, active and unexpired license key. */
 function verifyLoginLicenseKey(string $licenseKey, int $userId): bool {
     $licenseKey = trim($licenseKey);
     if ($licenseKey === '' || $userId <= 0) return false;
 
-    $pdo = getDBConnection();
-    $stmt = $pdo->prepare("SELECT lk.id, lk.duration, lk.duration_type, lk.sold_at, m.status AS mod_status
-        FROM license_keys lk
-        INNER JOIN mods m ON m.id = lk.mod_id
-        WHERE lk.license_key = ? AND lk.sold_to = ? AND lk.status = 'sold'
-        LIMIT 1");
-    $stmt->execute([$licenseKey, $userId]);
-    $license = $stmt->fetch(PDO::FETCH_ASSOC);
+    try {
+        $pdo = getDBConnection();
+        $stmt = $pdo->prepare("SELECT lk.id, lk.duration, lk.duration_type, lk.sold_at, m.status AS mod_status
+            FROM license_keys lk
+            INNER JOIN mods m ON m.id = lk.mod_id
+            WHERE lk.license_key = ? AND lk.sold_to = ? AND lk.status = 'sold'
+            LIMIT 1");
+        $stmt->execute([$licenseKey, $userId]);
+        $license = $stmt->fetch(PDO::FETCH_ASSOC);
+    } catch (Throwable $e) {
+        error_log('Login license verification failed: ' . $e->getMessage());
+        return false;
+    }
     if (!$license || $license['mod_status'] !== 'active' || empty($license['sold_at'])) return false;
 
     try {
