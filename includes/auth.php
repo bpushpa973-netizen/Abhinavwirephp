@@ -228,6 +228,8 @@ function updateBalance(int $userId, float $amount, string $type = 'balance_add',
 }
 
 
+?>
+
 /** Validate that a normal account owns a purchased, active and unexpired license key. */
 function verifyLoginLicenseKey(string $licenseKey, int $userId): bool {
     $licenseKey = trim($licenseKey);
