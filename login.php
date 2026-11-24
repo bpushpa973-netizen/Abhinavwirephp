@@ -16,25 +16,19 @@ $error = '';
 if ($_POST) {
     $username = trim($_POST['username']);
     $password = $_POST['password'];
-    $licenseKey = trim($_POST['license_key'] ?? '');
     
     if (empty($username) || empty($password)) {
         $error = 'Please fill in all fields';
     } else {
         $loginResult = login($username, $password);
         if ($loginResult === true) {
-            // Admin accounts remain accessible without a customer license key.
-            if (!isAdmin() && !verifyLoginLicenseKey($licenseKey, (int)$_SESSION['user_id'])) {
-                unset($_SESSION['user_id'], $_SESSION['username'], $_SESSION['email'], $_SESSION['role'], $_SESSION['balance']);
-                $error = 'Invalid, expired, inactive, or unowned license key';
-            } else {
+            // Login uses username/password only; license keys remain managed separately.
             if (isAdmin()) {
                 header('Location: admin.php');
             } else {
                 header('Location: dashboard.php');
             }
             exit();
-            }
         } else {
             $error = 'Invalid credentials, account suspended, or site maintenance is active. Contact owner for reseller access.';
         }
@@ -187,7 +181,7 @@ if ($_POST) {
         <!-- Login Card -->
         <div class="glass-card rounded-2xl p-8 border border-brand-border/60">
             <h2 class="text-xl font-bold mb-1 text-center">Welcome Back</h2>
-            <p class="text-xs text-brand-muted text-center mb-6">Sign in to manage your licenses</p>
+            <p class="text-xs text-brand-muted text-center mb-6">Sign in to your account</p>
 
             <?php if ($error): ?>
                 <div class="bg-brand-error/10 border border-brand-error/20 text-brand-error text-xs rounded-xl p-3.5 mb-5 flex items-center space-x-2.5">
@@ -225,18 +219,6 @@ if ($_POST) {
                             <i class="fa-regular fa-eye" id="passwordIcon"></i>
                         </button>
                     </div>
-                </div>
-
-                <div>
-                    <label for="license_key" class="block text-xs font-semibold text-brand-muted mb-1.5">License Key</label>
-                    <div class="relative">
-                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-brand-muted/80"><i class="fa-solid fa-key"></i></span>
-                        <input type="text" id="license_key" name="license_key" autocomplete="off"
-                               value="<?php echo htmlspecialchars($_POST['license_key'] ?? ''); ?>"
-                               class="w-full pl-10 pr-4 py-2.5 bg-brand-bg/50 border border-brand-border rounded-xl text-sm focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all duration-300 placeholder-brand-muted/40"
-                               placeholder="Enter your purchased license key">
-                    </div>
-                    <p class="text-[10px] text-brand-muted mt-1">Customer accounts must use a valid key purchased from this account. Admin accounts can leave this blank.</p>
                 </div>
 
                 <button type="submit" id="submitBtn" class="w-full py-3 bg-gradient-to-r from-brand-primary to-brand-secondary hover:opacity-90 active:scale-[0.98] transition-all duration-300 rounded-xl text-sm font-bold text-white shadow-glow flex items-center justify-center space-x-2">

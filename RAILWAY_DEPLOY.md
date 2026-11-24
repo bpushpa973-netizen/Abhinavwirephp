@@ -21,13 +21,13 @@ openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:3072 -out rsa_private.pe
 openssl pkey -in rsa_private.pem -pubout -out rsa_public.pem
 ```
 
-Set the private key in Railway Variables as `RSA_PRIVATE_KEY_BASE64`, using the base64 output of:
+In Railway, open the **PHP web service** (not the MySQL service) → **Variables** → **Add Variable**. Set the name to `RSA_PRIVATE_KEY_BASE64` and the value to the one-line Base64 output below. Then redeploy/restart the web service. The variable is not included in the ZIP, because private keys must remain secret.
 
 ```sh
-base64 -w 0 rsa_private.pem
+base64 rsa_private.pem | tr -d '\n'
 ```
 
-On macOS use `base64 < rsa_private.pem | tr -d '\n'`. Alternatively set `RSA_PRIVATE_KEY` to the PEM text; replace each newline with the literal `\\n` if the dashboard requires a single-line value. Keep `rsa_private.pem` secret. Distribute only `rsa_public.pem` to the client that verifies responses.
+On Termux, run `base64 ~/rsa_private.pem | tr -d '\n'` and copy the output directly into the Railway variable. Do not paste the private key or Base64 value into chats, source files, GitHub, or the client. If a private key has ever been shared publicly or in a chat, generate a fresh key pair and use the new matching public key in the client verifier. Distribute only `rsa_public.pem` to the client that verifies responses.
 
 Example PHP client verification:
 

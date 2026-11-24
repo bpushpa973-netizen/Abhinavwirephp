@@ -9,21 +9,39 @@ function sendSignedJson(array $payload, int $httpStatus = 200): never {
     header('Pragma: no-cache');
     header('X-Content-Type-Options: nosniff');
 
-    $privatePem = getenv('RSA_PRIVATE_KEY') ?: '';
-    if ($privatePem === '' && ($encoded = getenv('RSA_PRIVATE_KEY_BASE64'))) {
-        $decoded = base64_decode($encoded, true);
-        if ($decoded !== false) $privatePem = $decoded;
+    // Read secrets only from the Railway service environment; never bundle private keys.
+    $privatePem = trim((string)(getenv('RSA_PRIVATE_KEY') ?: ''));
+    if ($privatePem === '') {
+        $encoded = trim((string)(getenv('RSA_PRIVATE_KEY_BASE64') ?: ''));
+        if ($encoded !== '') {
+            // Permit wrapped Base64 copied from terminals as well as a single-line value.
+            $encoded = preg_replace('/\\s+/', '', $encoded) ?? $encoded;
+            $decoded = base64_decode($encoded, true);
+            if ($decoded !== false) $privatePem = $decoded;
+        }
     }
-    // Railway variables commonly store PEM newlines as literal \\n.
-    $privatePem = str_replace('\\n', "\n", $privatePem);
-    $privateKey = $privatePem !== '' ? openssl_pkey_get_private($privatePem) : false;
+    // Railway may store PEM line breaks as literal backslash-n characters.
+    $privatePem = str_replace(['\\r\\n', '\\n', '\\r'], "\n", $privatePem);
+    $privatePem = trim($privatePem);
 
-    if ($privateKey === false) {
+    if (!function_exists('openssl_pkey_get_private') || !function_exists('openssl_sign')) {
+        error_log('RSA signing unavailable: PHP OpenSSL extension is missing');
+        http_response_code(500);
+        echo json_encode(['error' => 'PHP OpenSSL extension is unavailable', 'signed' => false]);
+        exit;
+    }
+    if ($privatePem === '') {
+        error_log('RSA signing key missing: set RSA_PRIVATE_KEY_BASE64 in the Railway web service Variables');
         http_response_code(503);
-        echo json_encode([
-            'error' => 'RSA signing key is not configured on the server',
-            'signed' => false
-        ], JSON_UNESCAPED_SLASHES);
+        echo json_encode(['error' => 'RSA signing key is not configured on the server', 'signed' => false], JSON_UNESCAPED_SLASHES);
+        exit;
+    }
+
+    $privateKey = openssl_pkey_get_private($privatePem);
+    if ($privateKey === false) {
+        error_log('RSA signing key is present but invalid or malformed');
+        http_response_code(503);
+        echo json_encode(['error' => 'RSA signing key is configured but invalid; check RSA_PRIVATE_KEY_BASE64', 'signed' => false], JSON_UNESCAPED_SLASHES);
         exit;
     }
 
