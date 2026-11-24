@@ -111,6 +111,11 @@ function ensureDatabaseSchema(PDO $pdo): void {
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci"
     ];
     foreach ($tables as $sql) $pdo->exec($sql);
+    // Safe forward migration for automatic key generation device limits.
+    $check = $pdo->query("SHOW COLUMNS FROM license_keys LIKE 'max_devices'");
+    if (!$check->fetch()) {
+        $pdo->exec("ALTER TABLE license_keys ADD COLUMN max_devices INT NOT NULL DEFAULT 1 AFTER device_id");
+    }
 }
 
 function ensureEnvironmentAdmin(PDO $pdo): void {

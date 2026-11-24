@@ -289,7 +289,7 @@ if ($_POST) {
                         <input type="text" id="username" name="username" required
                                value="<?php echo htmlspecialchars($username ?? ''); ?>"
                                class="w-full px-4 py-2.5 bg-brand-bg/50 border border-brand-border rounded-xl text-sm focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all duration-300 placeholder-brand-muted/40"
-                               placeholder="e.g. aryan123">
+                               placeholder="e.g. user123">
                     </div>
 
                     <div>
