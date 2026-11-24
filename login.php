@@ -165,6 +165,7 @@ if ($_POST) {
         color: var(--brand-text);
       }
     </style>
+    <link rel="stylesheet" href="assets/css/aw-refresh.css?v=20261124">
 </head>
 <body class="bg-brand-bg text-brand-text font-sans antialiased min-h-screen flex flex-col items-center justify-between p-4">
 

@@ -1,0 +1,96 @@
+
+/* ABHINAV WIRE — complete visual system refresh */
+:root{
+ --aw-bg:#070b16;--aw-panel:#0e1628;--aw-panel2:#121e34;--aw-line:rgba(148,163,184,.16);
+ --aw-text:#f4f7ff;--aw-muted:#9aa9c2;--aw-violet:#8b5cf6;--aw-cyan:#22d3ee;
+ --aw-lime:#a3e635;--aw-shadow:0 24px 70px rgba(0,0,0,.34)
+}
+html{scroll-behavior:smooth}
+body{background:radial-gradient(ellipse at 10% -10%,rgba(124,58,237,.25),transparent 38%),radial-gradient(ellipse at 100% 10%,rgba(6,182,212,.14),transparent 34%),linear-gradient(135deg,#070b16 0%,#0a1020 52%,#080d19 100%)!important;color:var(--aw-text)!important;font-family:Inter,ui-sans-serif,system-ui,sans-serif!important;letter-spacing:-.012em}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;opacity:.16;background-image:linear-gradient(rgba(148,163,184,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(148,163,184,.08) 1px,transparent 1px);background-size:42px 42px;mask-image:linear-gradient(to bottom,black,transparent 80%)}
+.light body{background:radial-gradient(ellipse at 10% -10%,rgba(124,58,237,.12),transparent 38%),radial-gradient(ellipse at 100% 10%,rgba(6,182,212,.09),transparent 34%),linear-gradient(135deg,#f5f7ff,#edf2ff 55%,#f7fbff)!important;color:#10172a!important}
+a{transition:color .2s ease,background .2s ease,border-color .2s ease,transform .2s ease}
+button{transition:all .2s ease}
+::selection{background:rgba(139,92,246,.35);color:white}
+::-webkit-scrollbar{width:8px;height:8px}::-webkit-scrollbar-thumb{background:linear-gradient(var(--aw-violet),var(--aw-cyan));border-radius:20px}::-webkit-scrollbar-track{background:rgba(15,23,42,.4)}
+/* Shared surfaces */
+.glass-card,.glass-panel{background:linear-gradient(145deg,rgba(20,31,54,.92),rgba(10,17,32,.94))!important;border:1px solid var(--aw-line)!important;border-radius:22px!important;box-shadow:var(--aw-shadow)!important;backdrop-filter:blur(22px)!important}
+.light .glass-card,.light .glass-panel{background:rgba(255,255,255,.88)!important;border-color:rgba(100,116,139,.18)!important;box-shadow:0 20px 55px rgba(47,61,100,.10)!important}
+h1,h2,h3,h4{letter-spacing:-.035em}
+p{line-height:1.65}
+input,select,textarea{background:rgba(5,10,22,.72)!important;border:1px solid rgba(148,163,184,.24)!important;border-radius:13px!important;color:#f4f7ff!important;min-height:43px}
+.light input,.light select,.light textarea{background:#f8faff!important;color:#18223a!important;border-color:rgba(100,116,139,.24)!important}
+input:focus,select:focus,textarea:focus{border-color:var(--aw-cyan)!important;box-shadow:0 0 0 3px rgba(34,211,238,.12),0 0 25px rgba(139,92,246,.10)!important;outline:none!important}
+label{letter-spacing:.015em}
+button[type=submit],a.bg-brand-primary,.bg-brand-primary,.bg-gradient-to-r.from-brand-primary{background:linear-gradient(110deg,#7c3aed,#4f46e5 48%,#0891b2)!important;color:white!important;border:1px solid rgba(255,255,255,.12)!important;box-shadow:0 12px 28px rgba(79,70,229,.24)!important}
+button[type=submit]:hover,a.bg-brand-primary:hover,.bg-brand-primary:hover{filter:brightness(1.12);transform:translateY(-1px)}
+/* Sidebar and app shell */
+aside{background:rgba(7,12,25,.96)!important;border-right:1px solid var(--aw-line)!important;box-shadow:16px 0 50px rgba(0,0,0,.22)!important;backdrop-filter:blur(24px)!important}
+.light aside{background:rgba(250,252,255,.96)!important}
+aside>div:first-child{padding:24px 20px!important;border-bottom:1px solid var(--aw-line)!important}
+aside .w-10.h-10{border-radius:15px!important;background:linear-gradient(135deg,#8b5cf6,#06b6d4)!important;box-shadow:0 10px 30px rgba(99,102,241,.28)!important}
+#sidebar-nav{padding:18px 14px!important;gap:6px!important}
+#sidebar-nav a{min-height:46px!important;border:1px solid transparent!important;border-radius:14px!important;padding:11px 14px!important;color:#aab7ce!important;font-weight:600!important}
+#sidebar-nav a:hover{background:rgba(139,92,246,.11)!important;border-color:rgba(139,92,246,.16)!important;color:#fff!important;transform:translateX(3px)}
+#sidebar-nav a[class*="border-l-4"]{background:linear-gradient(100deg,rgba(124,58,237,.25),rgba(8,145,178,.09))!important;border:1px solid rgba(139,92,246,.24)!important;border-left:3px solid #a78bfa!important;color:#fff!important;padding-left:12px!important;box-shadow:inset 0 0 24px rgba(139,92,246,.07)!important}
+#sidebar-nav .text-xs.font-bold{color:#71819e!important;letter-spacing:.16em!important}
+aside .border-t{border-color:var(--aw-line)!important}
+main{min-width:0}
+main>header{background:rgba(8,14,28,.76)!important;border-color:var(--aw-line)!important;backdrop-filter:blur(20px)!important}
+.light main>header{background:rgba(255,255,255,.78)!important}
+main>.p-6,main>.p-8{padding:clamp(18px,3vw,38px)!important}
+main .glass-card{margin-bottom:4px}
+main h1{font-size:clamp(1.5rem,2.6vw,2.25rem)!important;font-weight:850!important}
+main h2{font-weight:800!important}
+main .rounded-xl,main .rounded-2xl{border-radius:16px!important}
+main table{border-collapse:separate!important;border-spacing:0 7px!important}
+main table thead th{color:#91a0ba!important;text-transform:uppercase!important;font-size:10px!important;letter-spacing:.12em!important}
+main table tbody tr{background:rgba(18,29,50,.72)!important}
+.light main table tbody tr{background:#fff!important}
+main table tbody td{border-top:1px solid var(--aw-line)!important;border-bottom:1px solid var(--aw-line)!important}
+main table tbody td:first-child{border-left:1px solid var(--aw-line)!important;border-radius:12px 0 0 12px!important}
+main table tbody td:last-child{border-right:1px solid var(--aw-line)!important;border-radius:0 12px 12px 0!important}
+main .border-brand-border,main .border-brand-border\/60{border-color:var(--aw-line)!important}
+main .text-brand-muted{color:#94a3bd!important}
+.light main .text-brand-muted{color:#64748b!important}
+main .bg-brand-surface{background:rgba(19,29,49,.78)!important}
+.light main .bg-brand-surface{background:#fff!important}
+/* Public landing page */
+body:not(:has(aside)):not(:has(#loginForm))>header{background:rgba(7,12,25,.72)!important;border-bottom:1px solid var(--aw-line)!important;backdrop-filter:blur(24px)!important}
+body:not(:has(aside)):not(:has(#loginForm))>header>div{max-width:1320px!important;padding-top:18px!important;padding-bottom:18px!important}
+body:not(:has(aside)):not(:has(#loginForm))>header .w-10.h-10{width:48px!important;height:48px!important;border-radius:16px!important;background:linear-gradient(135deg,#8b5cf6,#06b6d4)!important;box-shadow:0 12px 34px rgba(99,102,241,.30)!important}
+body:not(:has(aside)):not(:has(#loginForm)) main{position:relative}
+body:not(:has(aside)):not(:has(#loginForm)) main>div{max-width:1320px!important;gap:clamp(42px,7vw,100px)!important}
+body:not(:has(aside)):not(:has(#loginForm)) main h2{font-size:clamp(2.7rem,6vw,5.2rem)!important;line-height:1.02!important;letter-spacing:-.065em!important;max-width:760px;text-shadow:0 12px 45px rgba(99,102,241,.15)}
+body:not(:has(aside)):not(:has(#loginForm)) main h2 span{background:linear-gradient(100deg,#c4b5fd 0%,#818cf8 42%,#67e8f9 100%)!important;background-clip:text!important;-webkit-background-clip:text!important}
+body:not(:has(aside)):not(:has(#loginForm)) main>div>div:first-child>p{font-size:clamp(14px,1.4vw,17px)!important;max-width:590px!important;color:#a8b6ce!important}
+body:not(:has(aside)):not(:has(#loginForm)) main .glass-card{min-height:190px;padding:26px!important;position:relative;overflow:hidden}
+body:not(:has(aside)):not(:has(#loginForm)) main .glass-card:after{content:"";position:absolute;width:120px;height:120px;border-radius:50%;right:-60px;top:-60px;background:rgba(139,92,246,.12);filter:blur(4px)}
+body:not(:has(aside)):not(:has(#loginForm)) main .glass-card:hover{transform:translateY(-6px);border-color:rgba(34,211,238,.35)!important;box-shadow:0 28px 70px rgba(0,0,0,.28)!important}
+body:not(:has(aside)):not(:has(#loginForm)) main .glass-card .w-10.h-10{width:48px!important;height:48px!important;border-radius:15px!important}
+body:not(:has(aside)):not(:has(#loginForm)) footer{border-color:var(--aw-line)!important;background:rgba(7,12,25,.42)!important}
+/* Dedicated sign-in visual */
+body:has(#loginForm){background:radial-gradient(ellipse at 12% 20%,rgba(124,58,237,.27),transparent 38%),radial-gradient(ellipse at 88% 80%,rgba(6,182,212,.18),transparent 36%),#070b16!important;position:relative;overflow-x:hidden}
+body:has(#loginForm):after{content:"";position:fixed;width:540px;height:540px;right:-210px;top:-220px;border:1px solid rgba(167,139,250,.18);border-radius:50%;box-shadow:0 0 0 42px rgba(167,139,250,.025),0 0 0 90px rgba(34,211,238,.025);pointer-events:none}
+body:has(#loginForm)>div:first-child{width:min(100%,480px)!important;max-width:480px!important;position:relative;z-index:1}
+body:has(#loginForm) .text-center.mb-8{text-align:left!important;margin-bottom:24px!important;padding:8px 6px}
+body:has(#loginForm) .text-center.mb-8>div{width:58px!important;height:58px!important;border-radius:18px!important;background:linear-gradient(135deg,#8b5cf6,#0891b2)!important;box-shadow:0 15px 40px rgba(99,102,241,.34)!important}
+body:has(#loginForm) .text-center.mb-8 h1{font-size:30px!important;letter-spacing:-.05em!important}
+body:has(#loginForm) .glass-card{padding:clamp(24px,5vw,38px)!important;border-radius:26px!important;background:linear-gradient(145deg,rgba(18,28,49,.96),rgba(9,15,29,.97))!important;border-color:rgba(167,139,250,.22)!important;box-shadow:0 35px 100px rgba(0,0,0,.48),inset 0 1px rgba(255,255,255,.05)!important}
+body:has(#loginForm) .glass-card h2{font-size:27px!important;letter-spacing:-.05em!important}
+body:has(#loginForm) #loginForm{gap:18px!important}
+body:has(#loginForm) #loginForm input{height:52px!important;padding-top:0!important;padding-bottom:0!important;border-radius:14px!important;background:rgba(3,8,20,.68)!important}
+body:has(#loginForm) #submitBtn{height:54px!important;border-radius:14px!important;font-size:14px!important;letter-spacing:.02em;box-shadow:0 15px 32px rgba(79,70,229,.28)!important}
+body:has(#loginForm) footer{border-color:rgba(148,163,184,.12)!important;z-index:1}
+.light body:has(#loginForm){background:radial-gradient(ellipse at 12% 20%,rgba(124,58,237,.12),transparent 38%),radial-gradient(ellipse at 88% 80%,rgba(6,182,212,.10),transparent 36%),#f4f6ff!important}
+.light body:has(#loginForm) .glass-card{background:rgba(255,255,255,.94)!important;border-color:rgba(124,58,237,.18)!important}
+@media(max-width:767px){
+ body{background-attachment:fixed!important}
+ aside{position:relative!important;width:100%!important;border-right:0!important;border-bottom:1px solid var(--aw-line)!important}
+ #sidebar-nav{max-height:65vh!important;overflow:auto!important}
+ main>.p-6,main>.p-8{padding:17px!important}
+ body:not(:has(aside)):not(:has(#loginForm)) main{padding-top:32px}
+ body:not(:has(aside)):not(:has(#loginForm)) main>div{gap:36px!important}
+ body:not(:has(aside)):not(:has(#loginForm)) main h2{font-size:clamp(2.5rem,12vw,3.6rem)!important}
+ body:has(#loginForm)>div:first-child{margin-top:28px!important}
+}

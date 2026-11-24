@@ -144,6 +144,7 @@ if ($isLoggedIn) {
         
         document.addEventListener('DOMContentLoaded', updateThemeIcons);
     </script>
+    <link rel="stylesheet" href="assets/css/aw-refresh.css?v=20261124">
 </head>
 <body class="bg-brand-bg text-brand-text font-sans antialiased min-h-screen flex flex-col justify-between">
 

@@ -34,7 +34,7 @@ if ($isLoggedIn) {
             document.documentElement.classList.remove('light');
         }
     </script>
-    <link rel="stylesheet" href="assets/css/aw-premium.css?v=1">
+    <link rel="stylesheet" href="assets/css/aw-premium.css?v=2">
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -192,6 +192,7 @@ if ($isLoggedIn) {
         
         document.addEventListener('DOMContentLoaded', updateThemeIcons);
     </script>
+    <link rel="stylesheet" href="assets/css/aw-refresh.css?v=20261124">
 </head>
 <body class="bg-brand-bg text-brand-text font-sans antialiased min-h-screen flex flex-col md:flex-row">
 <?php if ($isLoggedIn): ?>
