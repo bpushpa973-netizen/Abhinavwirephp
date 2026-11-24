@@ -34,6 +34,7 @@ if ($isLoggedIn) {
             document.documentElement.classList.remove('light');
         }
     </script>
+    <link rel="stylesheet" href="assets/css/aw-premium.css?v=1">
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -237,6 +238,10 @@ if ($isLoggedIn) {
                     <i class="fa-solid fa-bolt w-5 text-center"></i>
                     <span>Generate Keys</span>
                 </a>
+                <a href="my-keys" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 <?php echo $current_page == 'my-keys.php' ? 'bg-brand-primary/10 text-brand-primary border-l-4 border-brand-primary pl-2 shadow-glow' : 'text-brand-muted hover:bg-brand-surface/50 hover:text-brand-text' ?>">
+                    <i class="fa-solid fa-vault w-5 text-center"></i>
+                    <span>My Keys</span>
+                </a>
                 <a href="admin-control.php" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 <?php echo $current_page == 'admin-control.php' ? 'bg-brand-primary/10 text-brand-primary border-l-4 border-brand-primary pl-2 shadow-glow' : 'text-brand-muted hover:bg-brand-surface/50 hover:text-brand-text' ?>">
                     <i class="fa-solid fa-shield-halved w-5 text-center"></i><span>Admin Control Panel</span>
                 </a>
@@ -274,7 +279,11 @@ if ($isLoggedIn) {
                     <i class="fa-solid fa-bolt w-5 text-center"></i>
                     <span>Generate Keys</span>
                 </a>
-                <a href="keys" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 <?php echo in_array($current_page, ['keys.php', 'generate.php']) ? 'bg-brand-primary/10 text-brand-primary border-l-4 border-brand-primary pl-2 shadow-glow' : 'text-brand-muted hover:bg-brand-surface/50 hover:text-brand-text' ?>">
+                <a href="my-keys" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 <?php echo $current_page == 'my-keys.php' ? 'bg-brand-primary/10 text-brand-primary border-l-4 border-brand-primary pl-2 shadow-glow' : 'text-brand-muted hover:bg-brand-surface/50 hover:text-brand-text' ?>">
+                    <i class="fa-solid fa-vault w-5 text-center"></i>
+                    <span>My Keys</span>
+                </a>
+                <a href="keys" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 <?php echo $current_page == 'keys.php' ? 'bg-brand-primary/10 text-brand-primary border-l-4 border-brand-primary pl-2 shadow-glow' : 'text-brand-muted hover:bg-brand-surface/50 hover:text-brand-text' ?>">
                     <i class="fa-solid fa-key w-5 text-center"></i>
                     <span>Purchase Keys</span>
                 </a>

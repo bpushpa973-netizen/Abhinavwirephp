@@ -175,7 +175,7 @@ if ($_POST) {
                 <i class="fa-solid fa-cube text-white text-3xl"></i>
             </div>
             <h1 class="text-3xl font-extrabold tracking-tight bg-gradient-to-r from-brand-primary to-brand-secondary bg-clip-text text-transparent"><?php echo SITE_NAME; ?></h1>
-            <p class="text-xs uppercase font-bold tracking-widest text-brand-muted mt-1"><?php echo SITE_SUBTITLE; ?> Key Manager</p>
+            <p class="text-xs uppercase font-bold tracking-widest text-brand-muted mt-1"><?php echo SITE_SUBTITLE; ?> Control Panel</p>
         </div>
 
         <!-- Login Card -->
