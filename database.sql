@@ -38,6 +38,7 @@ CREATE TABLE `license_keys` (
   `sold_to` int(11) DEFAULT NULL,
   `sold_at` timestamp NULL DEFAULT NULL,
   `device_id` varchar(255) DEFAULT NULL,
+  `max_devices` int NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 

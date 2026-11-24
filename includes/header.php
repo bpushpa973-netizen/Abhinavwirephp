@@ -233,6 +233,10 @@ if ($isLoggedIn) {
                     <i class="fa-solid fa-chart-line w-5 text-center"></i>
                     <span>Dashboard</span>
                 </a>
+                <a href="generate" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 <?php echo $current_page == 'generate.php' ? 'bg-brand-primary/10 text-brand-primary border-l-4 border-brand-primary pl-2 shadow-glow' : 'text-brand-muted hover:bg-brand-surface/50 hover:text-brand-text' ?>">
+                    <i class="fa-solid fa-bolt w-5 text-center"></i>
+                    <span>Generate Keys</span>
+                </a>
                 <a href="mods" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 <?php echo in_array($current_page, ['mods.php', 'add-mod.php', 'upload.php']) ? 'bg-brand-primary/10 text-brand-primary border-l-4 border-brand-primary pl-2 shadow-glow' : 'text-brand-muted hover:bg-brand-surface/50 hover:text-brand-text' ?>">
                     <i class="fa-solid fa-gamepad w-5 text-center"></i>
                     <span>Manage Mods</span>
@@ -262,6 +266,10 @@ if ($isLoggedIn) {
                 <a href="dashboard" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 <?php echo $current_page == 'dashboard.php' ? 'bg-brand-primary/10 text-brand-primary border-l-4 border-brand-primary pl-2 shadow-glow' : 'text-brand-muted hover:bg-brand-surface/50 hover:text-brand-text' ?>">
                     <i class="fa-solid fa-house w-5 text-center"></i>
                     <span>Dashboard</span>
+                </a>
+                <a href="generate" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 <?php echo $current_page == 'generate.php' ? 'bg-brand-primary/10 text-brand-primary border-l-4 border-brand-primary pl-2 shadow-glow' : 'text-brand-muted hover:bg-brand-surface/50 hover:text-brand-text' ?>">
+                    <i class="fa-solid fa-bolt w-5 text-center"></i>
+                    <span>Generate Keys</span>
                 </a>
                 <a href="keys" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 <?php echo in_array($current_page, ['keys.php', 'generate.php']) ? 'bg-brand-primary/10 text-brand-primary border-l-4 border-brand-primary pl-2 shadow-glow' : 'text-brand-muted hover:bg-brand-surface/50 hover:text-brand-text' ?>">
                     <i class="fa-solid fa-key w-5 text-center"></i>
