@@ -13,7 +13,7 @@ $error = '';
 $pdo = null;
 try {
     $pdo = getDBConnection();
-    $stmt = $pdo->query("SELECT * FROM users WHERE role = 'user' ORDER BY username");
+    $stmt = $pdo->query("SELECT * FROM users ORDER BY role, username");
     $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (Exception $e) {
     $error = 'Failed to fetch users: ' . $e->getMessage();
@@ -31,7 +31,7 @@ try {
             SUM(balance) as total_balance,
             COUNT(CASE WHEN balance > 0 THEN 1 END) as users_with_balance,
             AVG(balance) as avg_balance
-            FROM users WHERE role = 'user'");
+            FROM users");
         $userStats = $stmt->fetch(PDO::FETCH_ASSOC);
     } else {
         $userStats = [
@@ -71,7 +71,7 @@ if ($_POST) {
                         SUM(balance) as total_balance,
                         COUNT(CASE WHEN balance > 0 THEN 1 END) as users_with_balance,
                         AVG(balance) as avg_balance
-                        FROM users WHERE role = 'user'");
+                        FROM users");
                     $userStats = $stmt->fetch(PDO::FETCH_ASSOC);
                 }
             } else {
@@ -91,7 +91,7 @@ require_once 'includes/header.php';
 <div class="mb-8 flex items-center justify-between">
     <div>
         <h2 class="text-2xl font-bold tracking-tight text-glow-primary">Add User Balance</h2>
-        <p class="text-sm text-brand-muted mt-1 font-medium">Add credits to any registered user's wallet.</p>
+        <p class="text-sm text-brand-muted mt-1 font-medium">Add credits to any account wallet, including the admin account.</p>
     </div>
     <a href="users" class="inline-flex items-center justify-center px-3.5 py-2 bg-brand-surface border border-brand-border text-xs font-semibold rounded-xl hover:text-brand-primary hover:border-brand-primary/40 transition-colors space-x-1.5">
         <i class="fa-solid fa-arrow-left-long"></i>
@@ -123,9 +123,9 @@ require_once 'includes/header.php';
     
     <form method="POST" class="space-y-4">
         <div>
-            <label for="user_id" class="block text-xs font-semibold text-brand-muted mb-1.5">Select User *</label>
+            <label for="user_id" class="block text-xs font-semibold text-brand-muted mb-1.5">Select Account *</label>
             <select id="user_id" name="user_id" required class="w-full px-4 py-2.5 bg-brand-bg/50 border border-brand-border rounded-xl text-sm focus:outline-none focus:border-brand-primary">
-                <option value="">Choose a user...</option>
+                <option value="">Choose an account...</option>
                 <?php foreach ($users as $u): ?>
                     <option value="<?php echo $u['id']; ?>" <?php echo $selectedUserId == $u['id'] ? 'selected' : ''; ?>>
                         <?php echo htmlspecialchars($u['username']); ?> (Current Balance: ₹<?php echo number_format($u['balance'], 2); ?>)

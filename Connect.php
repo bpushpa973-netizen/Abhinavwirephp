@@ -1,5 +1,5 @@
 <?php
-/** Abhinav Multipanel license verification endpoint. POST: game, user_key, serial. */
+/** Abhinav Wire license verification endpoint. POST: game, user_key, serial. */
 declare(strict_types=1);
 require_once __DIR__ . '/config/database.php';
 require_once __DIR__ . '/includes/signed_response.php';

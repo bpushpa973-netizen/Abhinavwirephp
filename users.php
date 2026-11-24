@@ -81,10 +81,10 @@ require_once 'includes/header.php';
         <h2 class="text-2xl font-bold tracking-tight text-glow-primary">Manage Users</h2>
         <p class="text-sm text-brand-muted mt-1 font-medium">Add, remove, and manage user accounts and wallets.</p>
     </div>
-    <a href="balance-add" class="inline-flex items-center justify-center px-4 py-2.5 bg-brand-primary text-white text-xs font-bold rounded-xl hover:opacity-90 active:scale-[0.98] transition-all space-x-1.5 shadow-glow">
-        <i class="fa-solid fa-wallet text-sm"></i>
-        <span>Add Balance</span>
-    </a>
+    <div class="flex flex-wrap gap-2">
+        <a href="create-user" class="inline-flex items-center justify-center px-4 py-2.5 bg-brand-primary text-white text-xs font-bold rounded-xl hover:opacity-90 active:scale-[0.98] transition-all space-x-1.5 shadow-glow"><i class="fa-solid fa-user-plus"></i><span>Create Reseller</span></a>
+        <a href="balance-add" class="inline-flex items-center justify-center px-4 py-2.5 bg-brand-surface border border-brand-border text-brand-text text-xs font-bold rounded-xl hover:opacity-90 active:scale-[0.98] transition-all space-x-1.5"><i class="fa-solid fa-wallet text-sm"></i><span>Add Balance</span></a>
+    </div>
 </div>
 
 <!-- Alerts -->

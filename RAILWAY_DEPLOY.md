@@ -1,4 +1,4 @@
-# Abhinav Multipanel — Railway deployment
+# Abhinav Wire — Railway deployment
 
 ## Deploy
 1. Push this folder's contents to a GitHub repository and create a Railway project from that repository (or deploy the folder with the Railway CLI).

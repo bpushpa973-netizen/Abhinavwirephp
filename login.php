@@ -246,24 +246,15 @@ if ($_POST) {
             </form>
 
             <div class="mt-6 pt-6 border-t border-brand-border/60 text-center">
-                <p class="text-xs text-brand-muted">
-                    Don't have an account? 
-                    <a href="register" class="text-brand-primary font-bold hover:underline transition-all">Create one here</a>
-                </p>
+                <p class="text-sm font-semibold text-brand-text">Need a reseller account?</p>
+                <p class="text-xs text-brand-muted mt-1">Contact owner for reseller access.</p>
             </div>
         </div>
     </div>
 
     <!-- Global Footer -->
     <footer class="w-full max-w-7xl mx-auto px-6 py-6 text-brand-muted border-t border-brand-border/20">
-        <?php 
-        $footer_html = base64_decode("PGRpdiBjbGFzcz0iZmxleCBmbGV4LWNvbCBtZDpmbGV4LXJvdyBpdGVtcy1jZW50ZXIganVzdGlmeS1iZXR3ZWVuIGdhcC00IHRleHQteHMgdGV4dC1icmFuZC1tdXRlZCB3LWZ1bGwiPjxwIGNsYXNzPSJ0ZXh0LWNlbnRlciBtZDp0ZXh0LWxlZnQiPiZjb3B5OyBfX1lFQVJfXyBfX1NJVEVfXy4gQWxsIHJpZ2h0cyByZXNlcnZlZC48L3A+PGRpdiBjbGFzcz0iZmxleCBmbGV4LWNvbCBzbTpmbGV4LXJvdyBpdGVtcy1jZW50ZXIgZ2FwLTMgc206Z2FwLTQgdGV4dC1jZW50ZXIgc206dGV4dC1yaWdodCI+PGEgaHJlZj0iaHR0cHM6Ly90Lm1lL0FCSElOQVYiIHRhcmdldD0iX2JsYW5rIiBjbGFzcz0iaG92ZXI6dGV4dC1icmFuZC1wcmltYXJ5IHRyYW5zaXRpb24tY29sb3JzIGZsZXggaXRlbXMtY2VudGVyIHNwYWNlLXgtMS41IGZvbnQtbWVkaXVtIj48aSBjbGFzcz0iZmEtYnJhbmRzIGZhLXRlbGVncmFtIHRleHQteHMgdGV4dC1icmFuZC1wcmltYXJ5Ij48L2k+PHNwYW4+RGVzaWduZWQgYW5kIGRldmVsb3BlZCBieSBAYWJoaW5hdjwvc3Bhbj48L2E+PHNwYW4gY2xhc3M9ImhpZGRlbiBzbTppbmxpbmUgdGV4dC1icmFuZC1ib3JkZXIvNDAiPnw8L3NwYW4+PGEgaHJlZj0iaHR0cHM6Ly9hcnlhbmlzcGVob3N0LmluLyIgdGFyZ2V0PSJfYmxhbmsiIGNsYXNzPSJob3Zlcjp0ZXh0LWJyYW5kLXByaW1hcnkgdHJhbnNpdGlvbi1jb2xvcnMgZmxleCBpdGVtcy1jZW50ZXIgc3BhY2UteC0xLjUgZm9udC1tZWRpdW0iPjxpIGNsYXNzPSJmYS1zb2xpZCBmYS1zZXJ2ZXIgdGV4dC14cyB0ZXh0LWJyYW5kLXNlY29uZGFyeSI+PC9pPjxzcGFuPlBvd2VyZWQgYnkgQWJoaW5hdiBIb3N0PC9zcGFuPjwvYT48L2Rpdj48L2Rpdj4=");
-        echo str_replace(
-            ['__YEAR__', '__SITE__'],
-            [date('Y'), SITE_NAME . ' ' . SITE_SUBTITLE],
-            $footer_html
-        );
-        ?>
+        <?php echo str_replace(['__YEAR__', '__SITE__'], [date('Y'), SITE_NAME . ' ' . SITE_SUBTITLE], '<div class="flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-brand-muted w-full"><p class="text-center md:text-left">&copy; __YEAR__ __SITE__. All rights reserved.</p><p class="text-center">Abhinav Gaming</p></div>'); ?>
     </footer>
 
     <script>

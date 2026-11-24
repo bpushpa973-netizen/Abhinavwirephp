@@ -29,8 +29,8 @@ function railwayDatabaseConfig(): array {
     return ['host'=>$host, 'port'=>$port ?: '3306', 'database'=>$name, 'username'=>$user, 'password'=>$pass ?? ''];
 }
 
-if (!defined('SITE_NAME')) define('SITE_NAME', envValue('SITE_NAME', 'Abhinav'));
-if (!defined('SITE_SUBTITLE')) define('SITE_SUBTITLE', envValue('SITE_SUBTITLE', 'Multipanel'));
+if (!defined('SITE_NAME')) define('SITE_NAME', envValue('SITE_NAME', 'Abhinav Wire'));
+if (!defined('SITE_SUBTITLE')) define('SITE_SUBTITLE', envValue('SITE_SUBTITLE', 'Abhinav Gaming'));
 
 /** Create the app's tables on first connection. Safe to run on every deploy/request. */
 function ensureDatabaseSchema(PDO $pdo): void {
@@ -141,7 +141,7 @@ function getDBConnection(): PDO {
         ensureEnvironmentAdmin($pdo);
         return $pdo;
     } catch (Throwable $e) {
-        error_log('Abhinav Multipanel DB/bootstrap error: '.$e->getMessage());
+        error_log('Abhinav Wire DB/bootstrap error: '.$e->getMessage());
         throw new RuntimeException('Database setup failed. Check Railway MySQL Variables and ensure the MySQL service is reachable from this web service.');
     }
 }

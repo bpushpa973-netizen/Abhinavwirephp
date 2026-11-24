@@ -172,9 +172,7 @@ if ($isLoggedIn) {
                     <a href="login" class="text-xs font-bold text-brand-muted hover:text-brand-text transition-colors">
                         Sign In
                     </a>
-                    <a href="register" class="px-4 py-2 bg-brand-primary text-white text-xs font-bold rounded-xl hover:opacity-90 active:scale-[0.98] transition-all shadow-glow">
-                        Get Started
-                    </a>
+
                 <?php endif; ?>
             </div>
         </div>
@@ -205,14 +203,11 @@ if ($isLoggedIn) {
                             <span>My Dashboard</span>
                         </a>
                     <?php else: ?>
-                        <a href="register" class="inline-flex items-center justify-center px-6 py-3 bg-brand-primary text-white text-sm font-bold rounded-xl hover:opacity-90 active:scale-[0.98] transition-all space-x-2 shadow-glow">
-                            <i class="fa-solid fa-user-plus"></i>
-                            <span>Create Account</span>
-                        </a>
-                        <a href="login" class="inline-flex items-center justify-center px-6 py-3 bg-brand-surface border border-brand-border text-brand-text text-sm font-bold rounded-xl hover:bg-brand-surface/85 active:scale-[0.98] transition-all space-x-2">
+                        <a href="login" class="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-brand-primary to-brand-secondary text-white text-sm font-bold rounded-xl hover:opacity-90 active:scale-[0.98] transition-all space-x-2 shadow-glow">
                             <i class="fa-solid fa-right-to-bracket"></i>
                             <span>Sign In</span>
                         </a>
+                        <p class="text-xs text-brand-muted self-center">Contact owner for reseller access.</p>
                     <?php endif; ?>
                 </div>
             </div>
@@ -257,14 +252,7 @@ if ($isLoggedIn) {
 
     <footer class="border-t border-brand-border/60 py-6 bg-brand-surface/20">
         <div class="max-w-7xl mx-auto px-6 text-brand-muted">
-            <?php 
-            $footer_html = base64_decode("PGRpdiBjbGFzcz0iZmxleCBmbGV4LWNvbCBtZDpmbGV4LXJvdyBpdGVtcy1jZW50ZXIganVzdGlmeS1iZXR3ZWVuIGdhcC00IHRleHQteHMgdGV4dC1icmFuZC1tdXRlZCB3LWZ1bGwiPjxwIGNsYXNzPSJ0ZXh0LWNlbnRlciBtZDp0ZXh0LWxlZnQiPiZjb3B5OyBfX1lFQVJfXyBfX1NJVEVfXy4gQWxsIHJpZ2h0cyByZXNlcnZlZC48L3A+PGRpdiBjbGFzcz0iZmxleCBmbGV4LWNvbCBzbTpmbGV4LXJvdyBpdGVtcy1jZW50ZXIgZ2FwLTMgc206Z2FwLTQgdGV4dC1jZW50ZXIgc206dGV4dC1yaWdodCI+PGEgaHJlZj0iaHR0cHM6Ly90Lm1lL0FSWUFOSVNQRSIgdGFyZ2V0PSJfYmxhbmsiIGNsYXNzPSJob3Zlcjp0ZXh0LWJyYW5kLXByaW1hcnkgdHJhbnNpdGlvbi1jb2xvcnMgZmxleCBpdGVtcy1jZW50ZXIgc3BhY2UteC0xLjUgZm9udC1tZWRpdW0iPjxpIGNsYXNzPSJmYS1icmFuZHMgZmEtdGVsZWdyYW0gdGV4dC14cyB0ZXh0LWJyYW5kLXByaW1hcnkiPjwvaT48c3Bhbj5EZXNpZ25lZCBhbmQgZGV2ZWxvcGVkIGJ5IEBhcnlhbmlzcGU8L3NwYW4+PC9hPjxzcGFuIGNsYXNzPSJoaWRkZW4gc206aW5saW5lIHRleHQtYnJhbmQtYm9yZGVyLzQwIj58PC9zcGFuPjxhIGhyZWY9Imh0dHBzOi8vYXJ5YW5pc3BlaG9zdC5pbi8iIHRhcmdldD0iX2JsYW5rIiBjbGFzcz0iaG92ZXI6dGV4dC1icmFuZC1wcmltYXJ5IHRyYW5zaXRpb24tY29sb3JzIGZsZXggaXRlbXMtY2VudGVyIHNwYWNlLXgtMS41IGZvbnQtbWVkaXVtIj48aSBjbGFzcz0iZmEtc29saWQgZmEtc2VydmVyIHRleHQteHMgdGV4dC1icmFuZC1zZWNvbmRhcnkiPjwvaT48c3Bhbj5Qb3dlcmVkIGJ5IEFyeWFuaXNwZSBIb3N0PC9zcGFuPjwvYT4gPC9kaXY+PC9kaXY+");
-            echo str_replace(
-                ['__YEAR__', '__SITE__'],
-                [date('Y'), SITE_NAME . ' ' . SITE_SUBTITLE],
-                $footer_html
-            );
-            ?>
+            <?php echo str_replace(['__YEAR__', '__SITE__'], [date('Y'), SITE_NAME . ' ' . SITE_SUBTITLE], '<div class="flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-brand-muted w-full"><p class="text-center md:text-left">&copy; __YEAR__ __SITE__. All rights reserved.</p><p class="text-center">Designed and developed by Abhinav Gaming</p></div>'); ?>
         </div>
     </footer>
 
