@@ -16,10 +16,17 @@ function isAdmin() {
 
 // Redirect to login if not logged in
 function requireLogin() {
-    if (!isLoggedIn()) {
-        header('Location: login.php');
-        exit();
-    }
+    if (!isLoggedIn()) { header('Location: login.php'); exit(); }
+    try {
+        $pdo = getDBConnection();
+        $q = $pdo->prepare('SELECT role,is_banned FROM users WHERE id=?'); $q->execute([(int)$_SESSION['user_id']]);
+        $account = $q->fetch(PDO::FETCH_ASSOC);
+        if (!$account || !empty($account['is_banned'])) { session_destroy(); header('Location: login.php?status=restricted'); exit(); }
+        if ($account['role'] !== 'admin') {
+            $maintenance = $pdo->query("SELECT setting_value FROM app_settings WHERE setting_key='maintenance_mode'")->fetchColumn();
+            if ($maintenance === '1') { http_response_code(503); echo '<!doctype html><meta name="viewport" content="width=device-width,initial-scale=1"><title>Maintenance</title><style>body{background:#0b0f19;color:#f9fafb;font:16px Arial;display:grid;place-items:center;min-height:90vh;text-align:center}.box{padding:32px;border:1px solid #293244;border-radius:18px;max-width:420px}</style><div class="box"><h1>Site Under Maintenance</h1><p>Please contact owner and try again later.</p></div>'; exit(); }
+        }
+    } catch (Throwable $e) { error_log('Account access check: '.$e->getMessage()); }
 }
 
 // Redirect to admin panel if not admin
@@ -49,6 +56,11 @@ function login(string $username, string $password, bool $forceLogout = false) {
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
     
     if ($user && password_verify($password, $user['password'])) {
+        if (!empty($user['is_banned'])) return false;
+        if (($user['role'] ?? 'user') !== 'admin') {
+            $maintenance = $pdo->query("SELECT setting_value FROM app_settings WHERE setting_key='maintenance_mode'")->fetchColumn();
+            if ($maintenance === '1') return false;
+        }
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['username'] = $user['username'];
         $_SESSION['email'] = $user['email'];

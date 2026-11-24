@@ -111,6 +111,10 @@ function ensureDatabaseSchema(PDO $pdo): void {
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci"
     ];
     foreach ($tables as $sql) $pdo->exec($sql);
+    // Admin controls: account status and site-wide maintenance settings.
+    $pdo->exec("CREATE TABLE IF NOT EXISTS app_settings (setting_key VARCHAR(100) PRIMARY KEY, setting_value TEXT NULL, updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+    $userBan = $pdo->query("SHOW COLUMNS FROM users LIKE 'is_banned'");
+    if (!$userBan->fetch()) $pdo->exec("ALTER TABLE users ADD COLUMN is_banned TINYINT(1) NOT NULL DEFAULT 0 AFTER role");
     // Safe forward migration for automatic key generation device limits.
     $check = $pdo->query("SHOW COLUMNS FROM license_keys LIKE 'max_devices'");
     if (!$check->fetch()) {

@@ -237,6 +237,9 @@ if ($isLoggedIn) {
                     <i class="fa-solid fa-bolt w-5 text-center"></i>
                     <span>Generate Keys</span>
                 </a>
+                <a href="admin-control.php" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 <?php echo $current_page == 'admin-control.php' ? 'bg-brand-primary/10 text-brand-primary border-l-4 border-brand-primary pl-2 shadow-glow' : 'text-brand-muted hover:bg-brand-surface/50 hover:text-brand-text' ?>">
+                    <i class="fa-solid fa-shield-halved w-5 text-center"></i><span>Admin Control Panel</span>
+                </a>
                 <a href="mods" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 <?php echo in_array($current_page, ['mods.php', 'add-mod.php', 'upload.php']) ? 'bg-brand-primary/10 text-brand-primary border-l-4 border-brand-primary pl-2 shadow-glow' : 'text-brand-muted hover:bg-brand-surface/50 hover:text-brand-text' ?>">
                     <i class="fa-solid fa-gamepad w-5 text-center"></i>
                     <span>Manage Mods</span>

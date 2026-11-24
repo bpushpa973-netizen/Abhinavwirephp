@@ -112,6 +112,9 @@ $page_title = "Admin Dashboard - " . SITE_NAME . " " . SITE_SUBTITLE;
 require_once 'includes/header.php';
 ?>
 
+<!-- Admin Control shortcut -->
+<div class="mb-6"><a href="admin-control.php" class="inline-flex items-center gap-3 px-5 py-3 rounded-xl bg-gradient-to-r from-brand-primary to-brand-secondary text-white font-bold shadow-glow"><i class="fa-solid fa-shield-halved"></i> Open Full Admin Control Panel <i class="fa-solid fa-arrow-right"></i></a></div>
+
 <!-- Dashboard Header -->
 <div class="mb-8">
     <h2 class="text-2xl font-bold tracking-tight text-glow-primary">Dashboard Overview</h2>

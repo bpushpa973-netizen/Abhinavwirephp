@@ -36,7 +36,7 @@ if ($_POST) {
             exit();
             }
         } else {
-            $error = 'Invalid username or password';
+            $error = 'Invalid credentials, account suspended, or site maintenance is active. Contact owner for reseller access.';
         }
     }
 }
